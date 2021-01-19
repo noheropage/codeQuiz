@@ -15,6 +15,16 @@ var questions = [
         answer: ["blue", "red", "yellow", "green"],
         correct: "red",
     },
+    {
+        ask: "What is your quest?",
+        answer: ["Holy Grail", "Spinach", "Catch em All", "Dragons"],
+        correct: "Holy Grail",
+    },
+    {
+        ask: "Where should we go for dinner?",
+        answer: ["Taco Bell", "Pizza Hut", "Combo", "Anywhere else"],
+        correct: "Combo",
+    }
 
 ]
 
@@ -48,14 +58,16 @@ startButton.addEventListener("click", function () {
     setTime();
     // Hides starting text 
     startEl.style.visibility = "hidden";
-    generateQuestion();
+    questionEl.style.display = "block";
+    generateQuestion(0);
 })
 
+var rightAnswer;
 // TODO: generate question with multiple answers 
-function generateQuestion() {
-    for (var i = 0; i < questions.length; i++) {
+function generateQuestion(i) {
+    // for (var i = 0; i < questions.length; i++) {
         askEl.textContent = questions[i].ask;
-        var rightAnswer = questions[i].correct;
+        rightAnswer = questions[i].correct;
         console.log(rightAnswer);
         for (var n = 0; n < questions[i].answer.length; n++) {
             answerEl[n].textContent = questions[i].answer[n]
@@ -66,11 +78,15 @@ function generateQuestion() {
                 var input = element.textContent;
                 if (input === rightAnswer) {
                     console.log("Winner!")
+                    score++;
                 }
+                i++;
+                generateQuestion(i);
             }
+            
         })
 
-    }
+    // }
 }
 
 
