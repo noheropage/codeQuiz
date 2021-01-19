@@ -37,21 +37,16 @@ function setTime() {
         if (secondsLeft <= 0) {
             clearInterval(timerInterval);
             // TODO: 
-            // timesOut();
+            timesOut();
         }
     }, 1000);
 }
 
 // TODO: remove time for wrong answers 
-function wrongAnswer() {
-    // remove time 
-    // display message 
-    // move to next question 
-}
-
-function rightAnswer() {
-    // display message 
-    // move to next question 
+function message() {
+    var feedbackEl = document.createElement("div");
+    feedbackEl.textContent = "Winner!";
+    optionsEl.appendChild(feedbackEl);
 }
 // TODO: start button 
 startButton.addEventListener("click", function () {
@@ -65,7 +60,9 @@ startButton.addEventListener("click", function () {
 var rightAnswer;
 // TODO: generate question with multiple answers 
 function generateQuestion(i) {
-    // for (var i = 0; i < questions.length; i++) {
+    if (i == questions.length) {
+        timesOut();
+    } else {
         askEl.textContent = questions[i].ask;
         rightAnswer = questions[i].correct;
         console.log(rightAnswer);
@@ -77,19 +74,29 @@ function generateQuestion(i) {
             if (element.matches("button")) {
                 var input = element.textContent;
                 if (input === rightAnswer) {
-                    console.log("Winner!")
+                    message();
                     score++;
                 }
                 i++;
                 generateQuestion(i);
-            }
-            
+            } 
         })
-
-    // }
+    }
 }
 
 
 // TODO: end when timer hits 0 or run outta Qs 
+function timesOut() {
+    // hide current question
+    questionEl.style.display = "none";
+    // display score and ask for initials
+    startEl.style.visibility = "visible";
+    startEl.innerHTML = "<h1> Game Over </h1>"
+    var initials = document.createElement("input");
+    initials.setAttribute("type", "initials")
+    initials.setAttribute("placeholder", "Enter Initials Here")
+    startEl.appendChild(initials)
+    // display scoreboard 
+}
 
 // TODO: save score via initials 
