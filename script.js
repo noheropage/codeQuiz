@@ -4,6 +4,7 @@ var questionEl = document.querySelector(".quiz");
 var askEl = document.querySelector(".ask");
 var answerEl = document.querySelectorAll(".answers");
 var startEl = document.querySelector(".starter");
+var optionsEl = document.querySelector(".options");
 
 var secondsLeft = 10;
 var score = 0;
@@ -48,27 +49,31 @@ startButton.addEventListener("click", function () {
     // Hides starting text 
     startEl.style.visibility = "hidden";
     generateQuestion();
-    // console.log(answerEl[1].value)
 })
 
 // TODO: generate question with multiple answers 
 function generateQuestion() {
-    // questionEl.style.visibility = "visible";
-    // questionEl.textContent = "Is this working?"
-    for (var i=0; i < questions.length; i++) {
+    for (var i = 0; i < questions.length; i++) {
         askEl.textContent = questions[i].ask;
-        for (var n=0; n < questions[i].answer.length; n++){
-            console.log(answerEl[n].textContent)
-            console.log(questions[i].answer[n])
+        var rightAnswer = questions[i].correct;
+        console.log(rightAnswer);
+        for (var n = 0; n < questions[i].answer.length; n++) {
             answerEl[n].textContent = questions[i].answer[n]
-            console.log(answerEl[n].textContent)
-        }  
+        }
+        optionsEl.addEventListener("click", function (event) {
+            var element = event.target;
+            if (element.matches("button")) {
+                var input = element.textContent;
+                if (input === rightAnswer) {
+                    console.log("Winner!")
+                }
+            }
+        })
+
     }
 }
 
-function multipleChoice () {
 
-}
 // TODO: end when timer hits 0 or run outta Qs 
 
 // TODO: save score via initials 
