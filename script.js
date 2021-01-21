@@ -6,7 +6,7 @@ var answerEl = document.querySelectorAll(".answers");
 var startEl = document.querySelector(".starter");
 var optionsEl = document.querySelector(".options");
 
-var secondsLeft = 20;
+var secondsLeft = 5;
 var score = 0;
 var timerInterval;
 
@@ -171,11 +171,28 @@ function timesOut() {
         questionEl.style.display = "none";
         // display score and ask for initials
         startEl.style.visibility = "visible";
-        startEl.innerHTML = "<h1> Game Over </h1>"
+        startEl.innerHTML = "<h1> Game Over </h1> <br> <h4> Final Score: " + score + "</h4>"
         var initials = document.createElement("input");
-        initials.setAttribute("type", "initials")
+        var submit = document.createElement("input");
+        submit.setAttribute("type", "submit")
+        submit.setAttribute("class", "btn btn-primary")
+
+        initials.setAttribute("type", "text")
         initials.setAttribute("placeholder", "Enter Initials Here")
         startEl.appendChild(initials)
+        // startEl.appendChild.innerHTML("<hr></hr>")
+        startEl.appendChild(submit)
+        submit.addEventListener("click", function (event) {
+            event.preventDefault();
+            // initials.setAttribute("formaction", initials.value = initials.textContent)
+            var scores = {
+                initial: initials.value,
+                score: score
+            }
+            localStorage.setItem("initials", JSON.stringify(scores))
+
+        })
+
         // display scoreboard 
 
     }, 500)
