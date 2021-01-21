@@ -28,7 +28,7 @@ var questions = [
 
 ]
 
-// TODO: timer displayed (upper right hand corner perhaps) 
+// timer displayed (upper right hand corner perhaps) 
 function setTime() {
     var timerInterval = setInterval(function () {
         secondsLeft--;
@@ -36,17 +36,22 @@ function setTime() {
 
         if (secondsLeft <= 0) {
             clearInterval(timerInterval);
-            // TODO: 
+
             timesOut();
         }
     }, 1000);
 }
 
 // TODO: remove time for wrong answers 
-function message() {
-    var feedbackEl = document.createElement("div");
-    feedbackEl.textContent = "Winner!";
-    optionsEl.appendChild(feedbackEl);
+function message(test) {
+    document.getElementById("message").innerHTML = "<hr>" + test
+    // var feedbackEl = document.createElement("div");
+    // feedbackEl.innerHTML = ;
+    // optionsEl.appendChild(feedbackEl);
+    setTimeout(function () {
+        document.getElementById("message").innerHTML = "";
+    }, 1000);
+
 }
 // TODO: start button 
 startButton.addEventListener("click", function () {
@@ -74,12 +79,16 @@ function generateQuestion(i) {
             if (element.matches("button")) {
                 var input = element.textContent;
                 if (input === rightAnswer) {
-                    message();
+                    message("Correct!");
                     score++;
+                } else {
+                    message("Wrong!")
+                    // TODO:
+                    // minusTime();
                 }
                 i++;
                 generateQuestion(i);
-            } 
+            }
         })
     }
 }
@@ -87,16 +96,20 @@ function generateQuestion(i) {
 
 // TODO: end when timer hits 0 or run outta Qs 
 function timesOut() {
-    // hide current question
-    questionEl.style.display = "none";
-    // display score and ask for initials
-    startEl.style.visibility = "visible";
-    startEl.innerHTML = "<h1> Game Over </h1>"
-    var initials = document.createElement("input");
-    initials.setAttribute("type", "initials")
-    initials.setAttribute("placeholder", "Enter Initials Here")
-    startEl.appendChild(initials)
-    // display scoreboard 
+    setTimeout(function () {
+        // clearInterval(timerInterval);
+        // hide current question
+        questionEl.style.display = "none";
+        // display score and ask for initials
+        startEl.style.visibility = "visible";
+        startEl.innerHTML = "<h1> Game Over </h1>"
+        var initials = document.createElement("input");
+        initials.setAttribute("type", "initials")
+        initials.setAttribute("placeholder", "Enter Initials Here")
+        startEl.appendChild(initials)
+        // display scoreboard 
+    
+    }, 500)
 }
 
 // TODO: save score via initials 
