@@ -8,6 +8,7 @@ var optionsEl = document.querySelector(".options");
 
 var secondsLeft = 10;
 var score = 0;
+var timerInterval;
 
 var questions = [
     {
@@ -32,9 +33,10 @@ var questions = [
 function setTime() {
     var timerInterval = setInterval(function () {
         secondsLeft--;
-        timeEl.textContent = secondsLeft
+        timeEl.textContent = "Time: " + secondsLeft
 
         if (secondsLeft <= 0) {
+            secondsLeft = 0;
             clearInterval(timerInterval);
 
             timesOut();
@@ -44,16 +46,14 @@ function setTime() {
 
 // TODO: remove time for wrong answers 
 function message(test) {
+    // passes "correct" or "wrong" depending on user's choice 
     document.getElementById("message").innerHTML = "<hr>" + test
-    // var feedbackEl = document.createElement("div");
-    // feedbackEl.innerHTML = ;
-    // optionsEl.appendChild(feedbackEl);
+    // message will display for one second before disappearing 
     setTimeout(function () {
         document.getElementById("message").innerHTML = "";
     }, 1000);
 
-}
-// TODO: start button 
+} 
 startButton.addEventListener("click", function () {
     setTime();
     // Hides starting text 
@@ -83,8 +83,7 @@ function generateQuestion(i) {
                     score++;
                 } else {
                     message("Wrong!")
-                    // TODO:
-                    // minusTime();
+                    secondsLeft-= 2;                    
                 }
                 i++;
                 generateQuestion(i);
@@ -97,7 +96,7 @@ function generateQuestion(i) {
 // TODO: end when timer hits 0 or run outta Qs 
 function timesOut() {
     setTimeout(function () {
-        // clearInterval(timerInterval);
+        secondsLeft = 1;
         // hide current question
         questionEl.style.display = "none";
         // display score and ask for initials
