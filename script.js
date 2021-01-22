@@ -6,7 +6,7 @@ var answerEl = document.querySelectorAll(".answers");
 var startEl = document.querySelector(".starter");
 var optionsEl = document.querySelector(".options");
 
-var secondsLeft = 5;
+var secondsLeft = 60;
 var score = 0;
 var timerInterval;
 
@@ -128,13 +128,12 @@ startButton.addEventListener("click", function () {
 var rightAnswer;
 var i = 0;
 function generateQuestion(i) {
-    if (i == questions.length) {
+    if (i === questions.length) {
         timesOut();
     } else {
         askEl.textContent = questions[i].ask;
         rightAnswer = questions[i].correct;
-        console.log(i);
-        console.log(rightAnswer);
+        // console.log(rightAnswer);
         for (var n = 0; n < questions[i].answer.length; n++) {
             answerEl[n].textContent = questions[i].answer[n]
         }
@@ -143,7 +142,7 @@ function generateQuestion(i) {
 // TODO: test accuracy of questions with new function setup 
 optionsEl.addEventListener("click", function (event) {
     var element = event.target;
-    console.log(element)
+    // console.log(element)
     if (element.matches("button")) {
         var input = element.textContent;
         if (input === rightAnswer) {
@@ -153,17 +152,42 @@ optionsEl.addEventListener("click", function (event) {
             generateQuestion(i)
         } else {
             message("Wrong!")
-            secondsLeft -= 2;
+            secondsLeft -= 10;
             i++;
             generateQuestion(i)
         }
         // i++;
-        console.log(i)
+        // console.log(i)
         // generateQuestion(i);
     }
 })
+var initials;
+// var name;
+var submit;
+var scores = [];
 
-// TODO: create, save, and display scoreboard 
+
+var storedInitials = JSON.parse(localStorage.getItem("Initials"));
+var storedScores = JSON.parse(localStorage.getItem("Scores"))
+console.log(storedInitials)
+console.log(storedScores)
+// console.log(storedScores.score)
+// storedScores = storedScores || {};
+// console.log(storedScores)
+if (storedInitials == false || storedInitials == null || storedInitials == undefined) {
+    var arrScores = [];
+    var arrInitials = [];
+    console.log("test");
+} else {
+    arrScores = [storedScores];
+    arrInitials = [storedInitials];
+}
+
+
+console.log(arrInitials)
+console.log(arrScores);
+// arrInitials.push("anything")
+// console.log(arrInitials);
 function timesOut() {
     setTimeout(function () {
         timeEl.textContent = "Time: 0";
@@ -180,16 +204,42 @@ function timesOut() {
         initials.setAttribute("type", "text")
         initials.setAttribute("placeholder", "Enter Initials Here")
         startEl.appendChild(initials)
-        // startEl.appendChild.innerHTML("<hr></hr>")
         startEl.appendChild(submit)
+
         submit.addEventListener("click", function (event) {
             event.preventDefault();
-            // initials.setAttribute("formaction", initials.value = initials.textContent)
+            // var initialText = initials.value;
+            // scores.push(initialText);
+            // initials.value="";
+            // var storedScores = JSON.parse(localStorage.getItem("scores"));
             var scores = {
                 initial: initials.value,
                 score: score
             }
-            localStorage.setItem("initials", JSON.stringify(scores))
+            console.log(scores)
+            arrInitials.push(initials.value);
+            arrScores.push(score)
+            console.log(arrInitials)
+            console.log(arrScores);
+            localStorage.setItem("Initials", JSON.stringify(arrInitials))
+            localStorage.setItem("Scores", JSON.stringify(arrScores))
+            // if (!storedScores) {
+            //     storedScores = []
+            // }
+            // scores.initial += initials.value + " ";
+            // scores.score += score + " ";
+
+            // arrInitials = scores.initial.split(" ")
+            // arrScores = scores.score.split(" ")
+            // console.log(scores.initial[0])
+            // console.log(scores.score[0])
+            // localStorage.setItem("scores", JSON.stringify(scores))
+            // storeScores();
+            renderScores();
+            // storeScores();
+
+            // var scoreBoard = JSON.parse(localStorage.getItem("scores"))
+            // startEl.innerHTML = scoreBoard.initial + " with a score of " + scoreBoard.score
 
         })
 
@@ -198,4 +248,59 @@ function timesOut() {
     }, 500)
 }
 
+function storeScores() {
+    localStorage.setItem("Initials", JSON.stringify(arrInitials))
+    localStorage.setItem("Scores", JSON.stringify(arrScores))
+
+}
+
+var highScores = [];
+var clearBtn = document.createElement("button");
+function renderScores() {
+    startEl.style.display = "none"
+    questionEl.style.display = "block"
+    questionEl.innerHTML = "<h1> Highscores </h1> <hr>"
+    var scoreList = document.createElement("ul");
+    questionEl.appendChild(scoreList)
+
+    // var scoreBoard = JSON.parse(localStorage.getItem("scores"))
+
+    // arrInitials = scores.initial.split(" ")
+    // arrScores = scores.score.split(" ")
+    arrInitials = JSON.parse(localStorage.getItem("Initials"))
+    arrScores = JSON.parse(localStorage.getItem("Scores"))
+    if (!scores) {
+        scoreList.appendChild("Empty!");
+    } else {
+        for (i = 0; i < arrInitials.length; i++) {
+            var li = document.createElement("li")
+            // console.log(arrInitials.length);
+            li.textContent = arrInitials[i] + " with a score of " + arrScores[i]
+
+            scoreList.appendChild(li);
+        }
+    }
+
+
+    // highScores += scoreBoard.initial + " with a score of " + scoreBoard.score;
+    // clearBtn = document.createElement("button")
+    clearBtn.setAttribute("class", "btn btn-primary")
+    clearBtn.textContent = "Clear Scores"
+    scoreList.appendChild(clearBtn)
+
+
+    // console.log(highScores)
+    // storeScores()
+}
+clearBtn.addEventListener("click", function (event) {
+    arrInitials = [];
+    arrScores = [];
+    console.log(arrInitials, arrScores)
+    storeScores();
+    renderScores();
+})
+
+
+// TODO: get local storage working correctly 
+// TODO: make Go Back and Reset Score buttons 
 // TODO: pretty up the doc
